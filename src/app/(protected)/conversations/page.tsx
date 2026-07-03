@@ -27,7 +27,7 @@ export default function ConversationsPage() {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
 
-fetch('http://localhost:3000/conversations', {
+fetch(`${process.env.NEXT_PUBLIC_API_URL}/conversations`, {
   headers: {
     Authorization: `Bearer ${token}`,
   },
@@ -49,7 +49,7 @@ useEffect(() => {
     const token = localStorage.getItem('access_token');
 
     const response = await fetch(
-      'http://localhost:3000/conversations',
+	`${process.env.NEXT_PUBLIC_API_URL}/conversations`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ async function loadConversation(number: string, customerName: string,) {
   const token = localStorage.getItem('access_token');
 
   const response = await fetch(
-    `http://localhost:3000/conversations/${number}`,
+	`${process.env.NEXT_PUBLIC_API_URL}/conversations/${number}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -125,7 +125,7 @@ async function sendMessage() {
   const token = localStorage.getItem('access_token');
 
   const response = await fetch(
-    'http://localhost:3000/conversations/send',
+	`${process.env.NEXT_PUBLIC_API_URL}/conversations/send`,
     {
       method: 'POST',
       headers: {
@@ -152,7 +152,7 @@ if (result.success) {
   const token = localStorage.getItem('access_token');
 
   const response = await fetch(
-    'http://localhost:3000/conversations',
+	`${process.env.NEXT_PUBLIC_API_URL}/conversations`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
