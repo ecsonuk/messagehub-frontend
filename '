@@ -1,0 +1,35 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ConversationsService } from './conversations.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+
+@ApiTags('Conversations')
+@ApiBearerAuth('JWT')
+@Controller('conversations')
+@UseGuards(JwtAuthGuard)
+export class ConversationsController {
+  constructor(
+    private readonly conversationsService: ConversationsService,
+  ) {}
+
+  @Get()
+  async findAll() {
+    return this.conversationsService.findAll();
+  }
+
+@Get(':number')
+async findOne(
+  @Param('number') number: string,
+) {
+  return this.conversationsService.findOne(number);
+}
+
+}
