@@ -175,7 +175,7 @@ return (
     </h1>
 
 	<div className="grid flex-1 min-h-0 grid-cols-12 overflow-hidden rounded-lg border bg-white">
-	<div className="col-span-4 border-r flex flex-col">
+	<div className="col-span-4 border-r flex flex-col min-h-0">
 
 	<div className="p-3 border-b">
 	  <input
@@ -187,21 +187,24 @@ return (
 	  />
 	</div>
 
-	<ConversationList
-	  conversations={conversations.filter((item) => {
-	    const value = search.toLowerCase();
 
-	    return (
-	      item.customerName?.toLowerCase().includes(value) ||
-	      item.whatsappNumber.includes(value)
-	    );
-	  })}
-	  selectedCustomer={selectedCustomer}
-	  unread={unread}
-	  onSelect={loadConversation}
-	/>
+<div className="flex-1 min-h-0 overflow-hidden">
+  <ConversationList
+    conversations={conversations.filter((item) => {
+      const value = search.toLowerCase();
 
-	</div>
+      return (
+        item.customerName?.toLowerCase().includes(value) ||
+        item.whatsappNumber.includes(value)
+      );
+    })}
+    selectedCustomer={selectedCustomer}
+    unread={unread}
+    onSelect={loadConversation}
+  />
+</div>
+
+</div>
 
       {/* RIGHT PANEL */}
 

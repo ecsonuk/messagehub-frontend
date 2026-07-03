@@ -23,7 +23,7 @@ export default function ConversationList({
   onSelect,
 }: Props) {
   return (
-    <div className="h-full overflow-y-auto">
+	<div className="h-full overflow-y-auto overscroll-contain">
 
       {conversations.length === 0 && (
         <div className="p-6 text-gray-500">
