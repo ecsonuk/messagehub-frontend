@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import CreateTemplateModal from '@/components/templates/CreateTemplateModal';
 import { getTemplates } from '@/services/template.service';
+import api from '@/lib/api';
 
 interface Template {
   id: string;
@@ -33,6 +34,25 @@ export default function TemplatesPage() {
       setLoading(false);
     }
   }
+
+async function deleteTemplate(id: string) {
+  const confirmed = window.confirm(
+    'Are you sure you want to delete this template?',
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    await api.delete(`/templates/${id}`);
+
+    await loadTemplates();
+  } catch (err) {
+    console.error(err);
+    alert('Failed to delete template.');
+  }
+}
 
   useEffect(() => {
     loadTemplates();
@@ -105,6 +125,10 @@ export default function TemplatesPage() {
                   Created
                 </th>
 
+		<th className="px-6 py-3 text-center">
+		  Action
+		</th>
+
               </tr>
 
             </thead>
@@ -140,13 +164,23 @@ export default function TemplatesPage() {
 
                   </td>
 
-                  <td className="px-6 py-4">
-                    {new Date(
-                      template.createdAt,
-                    ).toLocaleString()}
-                  </td>
+<td className="px-6 py-4">
+  {new Date(
+    template.createdAt,
+  ).toLocaleString()}
+</td>
 
-                </tr>
+<td className="px-6 py-4 text-center">
+  <button
+    onClick={() => deleteTemplate(template.id)}
+    className="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+  >
+    Delete
+  </button>
+</td>
+
+</tr>
+
 
               ))}
 
