@@ -12,7 +12,7 @@ export default function MessageInput({
   onSend,
 }: Props) {
   return (
-    <div className="border-t bg-white p-4">
+	<div className="border-t bg-white p-5">
 
       <div className="flex gap-3">
 
@@ -25,13 +25,13 @@ export default function MessageInput({
             }
           }}
           placeholder="Type your message..."
-          className="flex-1 border rounded-lg px-4 py-2"
+	  className="flex-1 rounded-xl border px-5 py-3 text-[15px]"
         />
 
         <button
           onClick={onSend}
           disabled={sending}
-          className="rounded-lg bg-blue-600 px-6 text-white disabled:opacity-50"
+	  className="rounded-xl bg-blue-600 px-8 text-white transition hover:bg-blue-700 disabled:opacity-50"
         >
           {sending ? 'Sending...' : 'Send'}
         </button>

@@ -169,13 +169,13 @@ if (result.success) {
 }
 
 return (
-  <div className="h-[calc(100vh-170px)] flex flex-col p-6">
+	<div className="h-[calc(100vh-150px)] flex flex-col px-8 py-6 max-w-[1800px] mx-auto">
 	<h1 className="text-3xl font-semibold mb-5">
       Customer Inbox
     </h1>
 
-	<div className="grid flex-1 min-h-0 grid-cols-12 overflow-hidden rounded-lg border bg-white">
-	<div className="col-span-4 border-r flex flex-col min-h-0">
+	<div className="grid flex-1 min-h-0 grid-cols-12 gap-4 rounded-xl bg-transparent">
+	<div className="col-span-5 flex flex-col rounded-xl border bg-white shadow-sm overflow-hidden">
 
 	<div className="p-3 border-b">
 	  <input
@@ -183,7 +183,7 @@ return (
 	    placeholder="Search customer..."
 	    value={search}
 	    onChange={(e) => setSearch(e.target.value)}
-	    className="w-full rounded-lg border px-3 py-2 text-sm"
+	    className="w-full rounded-xl border px-4 py-3 text-sm"
 	  />
 	</div>
 
@@ -208,7 +208,7 @@ return (
 
       {/* RIGHT PANEL */}
 
-	<div className="col-span-8 flex min-h-0 flex-col">
+	<div className="col-span-7 flex min-h-0 flex-col rounded-xl border bg-white shadow-sm overflow-hidden">
 
         {!selectedCustomer && (
 
@@ -231,7 +231,7 @@ return (
 
             {/* CHAT */}
 
-	<div className="flex-1 overflow-y-auto p-6">
+	<div className="flex-1 overflow-y-auto px-10 py-8">
 	<MessageList
 	  messages={selectedConversation}
 	/>

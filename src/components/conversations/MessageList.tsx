@@ -26,8 +26,8 @@ useEffect(() => {
 }, [messages]);
 
   return (
-<div className="flex min-h-full flex-col gap-4 p-6">
 
+	<div className="flex min-h-full flex-col gap-6 p-8">
       {messages.length === 0 && (
         <div className="text-center text-gray-500">
           No messages yet.

@@ -24,13 +24,13 @@ export default function MessageBubble({
       }`}
     >
       <div
-        className={`max-w-[70%] rounded-2xl px-4 py-3 shadow-sm ${
+	className={`max-w-[88%] rounded-2xl px-6 py-4 shadow-sm ${
           outgoing
             ? 'bg-green-100'
             : 'bg-white border'
         }`}
       >
-        <div className="text-sm whitespace-pre-wrap break-words">
+	<div className="whitespace-pre-wrap break-words text-[15px] leading-7">
 	{linkify(message)}
         </div>
 
