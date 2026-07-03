@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ConversationList from '@/components/conversations/ConversationList';
 import ChatHeader from '@/components/conversations/ChatHeader';
 import MessageList from '@/components/conversations/MessageList';
@@ -23,6 +23,12 @@ export default function ConversationsPage() {
 	const [sending, setSending] = useState(false);
 	const [search, setSearch] = useState('');
 	const [unread, setUnread] = useState<Record<string, boolean>>({});
+
+const notificationSound = useRef<HTMLAudioElement | null>(null);
+
+useEffect(() => {
+  notificationSound.current = new Audio('/sounds/notification.mp3');
+}, []);
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -65,16 +71,19 @@ setConversations((previous) => {
       (p) => p.whatsappNumber === item.whatsappNumber,
     );
 
-    if (
-      oldItem &&
-      oldItem.lastInboundAt !== item.lastInboundAt &&
-      item.whatsappNumber !== selectedCustomer
-    ) {
-      setUnread((u) => ({
-        ...u,
-        [item.whatsappNumber]: true,
-      }));
-    }
+if (
+  oldItem &&
+  oldItem.lastInboundAt !== item.lastInboundAt &&
+  item.whatsappNumber !== selectedCustomer
+) {
+  setUnread((u) => ({
+    ...u,
+    [item.whatsappNumber]: true,
+  }));
+
+notificationSound.current?.play().catch(() => {});
+}
+
   });
 
   return data;
