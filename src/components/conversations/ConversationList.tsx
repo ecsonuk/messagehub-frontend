@@ -3,7 +3,9 @@ import ConversationItem from './ConversationItem';
 type Conversation = {
   whatsappNumber: string;
   customerName: string;
+  campaignName: string | null;
   lastInboundMessage: string | null;
+  lastInboundAt: string | null;
 };
 
 type Props = {
@@ -32,11 +34,14 @@ export default function ConversationList({
       )}
 
       {conversations.map((item) => (
+
 <ConversationItem
   key={item.whatsappNumber}
   customerName={item.customerName}
   whatsappNumber={item.whatsappNumber}
+  campaignName={item.campaignName}
   lastMessage={item.lastInboundMessage}
+  lastMessageAt={item.lastInboundAt}
   unread={unread[item.whatsappNumber] ?? false}
   selected={
     selectedCustomer ===
@@ -49,6 +54,7 @@ export default function ConversationList({
     )
   }
 />
+
       ))}
 
     </div>

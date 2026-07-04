@@ -9,6 +9,7 @@ import MessageInput from '@/components/conversations/MessageInput';
 type Conversation = {
   whatsappNumber: string;
   customerName: string;
+  campaignName: string | null;
   status: string;
   lastInboundMessage: string | null;
   lastInboundAt: string | null;
