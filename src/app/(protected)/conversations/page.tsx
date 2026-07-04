@@ -25,10 +25,29 @@ export default function ConversationsPage() {
 	const [unread, setUnread] = useState<Record<string, boolean>>({});
 
 const notificationSound = useRef<HTMLAudioElement | null>(null);
+const chatScrollRef = useRef<HTMLDivElement>(null);
+const bottomRef = useRef<HTMLDivElement>(null);
+
+const autoScrollRef = useRef(true);
+
 
 useEffect(() => {
   notificationSound.current = new Audio('/sounds/notification.mp3');
 }, []);
+
+function handleChatScroll() {
+  const el = chatScrollRef.current;
+
+  if (!el) return;
+
+  const distanceFromBottom =
+    el.scrollHeight -
+    el.scrollTop -
+    el.clientHeight;
+
+  autoScrollRef.current =
+    distanceFromBottom < 80;
+}
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -90,10 +109,20 @@ notificationSound.current?.play().catch(() => {});
 });
 
     if (selectedCustomer) {
-      await loadConversation(
-        selectedCustomer,
-        selectedCustomerName,
-      );
+
+await loadConversation(
+  selectedCustomer,
+  selectedCustomerName,
+);
+
+requestAnimationFrame(() => {
+  if (autoScrollRef.current) {
+    bottomRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }
+});
+
     }
   }, 5000);
 
@@ -117,6 +146,15 @@ async function loadConversation(number: string, customerName: string,) {
   setSelectedCustomer(number);
   setSelectedCustomerName(customerName);
   setSelectedConversation(data);
+
+requestAnimationFrame(() => {
+  if (autoScrollRef.current) {
+    bottomRef.current?.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }
+});
+
 	setUnread((u) => ({
 	  ...u,
 	  [number]: false,
@@ -239,15 +277,16 @@ return (
 	/>
 
             {/* CHAT */}
+<div
+  ref={chatScrollRef}
+  onScroll={handleChatScroll}
+  className="flex-1 overflow-y-auto px-10 py-8"
+>
 
-	<div className="flex-1 overflow-y-auto px-10 py-8">
-	<MessageList
-	  messages={selectedConversation}
-	/>
-
-	<div id="chat-bottom" />
-
-	<div id="chat-bottom" />
+<MessageList
+  messages={selectedConversation}
+  bottomRef={bottomRef}
+/>
 
             </div>
 

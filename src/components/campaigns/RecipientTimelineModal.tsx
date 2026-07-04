@@ -83,7 +83,7 @@ export default function RecipientTimelineModal({
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40">
 
-      <div className="w-full max-w-2xl rounded-xl bg-white shadow-xl">
+	<div className="flex max-h-[90vh] w-full max-w-2xl flex-col rounded-xl bg-white shadow-xl">
 
         <div className="flex items-center justify-between border-b p-6">
 
@@ -100,7 +100,7 @@ export default function RecipientTimelineModal({
 
         </div>
 
-<div className="p-6">
+<div className="flex-1 overflow-y-auto p-6">
 
   {loading && (
     <div>Loading...</div>

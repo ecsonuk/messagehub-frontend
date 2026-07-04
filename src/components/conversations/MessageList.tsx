@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import MessageBubble from './MessageBubble';
 
 type Message = {
@@ -11,42 +10,37 @@ type Message = {
 
 type Props = {
   messages: Message[];
+  bottomRef: React.RefObject<HTMLDivElement | null>;
 };
 
 export default function MessageList({
   messages,
+  bottomRef,
 }: Props) {
-
-const bottomRef = useRef<HTMLDivElement>(null);
-
-useEffect(() => {
-  bottomRef.current?.scrollIntoView({
-    behavior: 'smooth',
-  });
-}, [messages]);
-
   return (
+    <div className="flex min-h-full flex-col gap-6 p-8">
 
-	<div className="flex min-h-full flex-col gap-6 p-8">
       {messages.length === 0 && (
         <div className="text-center text-gray-500">
           No messages yet.
         </div>
       )}
 
-	<div className="mt-auto space-y-4">
+      <div className="mt-auto space-y-4">
 
-	{messages.map((msg) => (
-        <MessageBubble
-          key={msg.id}
-          direction={msg.direction}
-          message={msg.messageText}
-          createdAt={msg.createdAt}
-	  status={msg.status}
-        />
-      ))}
-	<div ref={bottomRef} />
-	</div>
+        {messages.map((msg) => (
+          <MessageBubble
+            key={msg.id}
+            direction={msg.direction}
+            message={msg.messageText}
+            createdAt={msg.createdAt}
+            status={msg.status}
+          />
+        ))}
+
+        <div ref={bottomRef} />
+
+      </div>
 
     </div>
   );

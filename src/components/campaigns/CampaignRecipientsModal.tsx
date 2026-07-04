@@ -264,14 +264,24 @@ if (!open) return null;
 
           </div>
 
-	<input
-	  placeholder="Search customer or WhatsApp number..."
-	  className="mb-6 w-full rounded border p-3"
-	  value={search}
-	  onChange={(e) =>
-	    setSearch(e.target.value)
-	  }
-	/>
+<div className="mb-6 flex gap-3">
+
+  <input
+    placeholder="Search customer or WhatsApp number..."
+    className="flex-1 rounded border p-3"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+
+  <button
+    onClick={loadRecipients}
+    disabled={loading}
+    className="rounded border border-slate-300 bg-white px-5 py-3 text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+  >
+    🔄 Refresh
+  </button>
+
+</div>
 
           <div className="rounded-lg border">
 
