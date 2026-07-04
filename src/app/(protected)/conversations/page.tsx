@@ -217,11 +217,8 @@ if (result.success) {
 }
 
 return (
-	<div className="h-[calc(100vh-150px)] flex flex-col px-8 py-6 max-w-[1800px] mx-auto">
-	<h1 className="text-3xl font-semibold mb-5">
-      Customer Inbox
-    </h1>
 
+	<div className="h-[calc(100vh-120px)] flex flex-col px-8 py-4 max-w-[1800px] mx-auto">
 	<div className="grid flex-1 min-h-0 grid-cols-12 gap-4 rounded-xl bg-transparent">
 	<div className="col-span-5 flex flex-col rounded-xl border bg-white shadow-sm overflow-hidden">
 

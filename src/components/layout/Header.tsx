@@ -1,11 +1,31 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { removeToken } from '@/lib/auth';
 
 export default function Header() {
   const router = useRouter();
+
+const pathname = usePathname();
+
+const pageTitle =
+  pathname === '/dashboard'
+    ? 'Dashboard'
+    : pathname === '/campaigns'
+    ? 'Campaigns'
+    : pathname === '/templates'
+    ? 'Templates'
+    : pathname === '/conversations'
+    ? 'Inbox'
+    : pathname === '/reports'
+    ? 'Reports'
+    : pathname === '/audit-logs'
+    ? 'Audit Logs'
+    : pathname === '/settings'
+    ? 'Settings'
+    : '';
+
 
   function logout() {
     removeToken();
@@ -18,7 +38,7 @@ export default function Header() {
       <div>
 
         <h2 className="text-xl font-semibold text-slate-800">
-          Dashboard
+	{pageTitle}
         </h2>
 
       </div>
