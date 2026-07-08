@@ -2,10 +2,24 @@ import MessageBubble from './MessageBubble';
 
 type Message = {
   id: string;
-  direction: 'INBOUND' | 'OUTBOUND';
-  messageText: string;
-  createdAt: string;
+
+  direction: string;
+
+  messageType: string;
+
+  messageText: string | null;
+
+  mediaType?: string;
+
+  metaMediaId?: string;
+
+  fileName?: string;
+
+  mimeType?: string;
+
   status?: string;
+
+  createdAt: string;
 };
 
 type Props = {
@@ -28,15 +42,29 @@ export default function MessageList({
 
       <div className="mt-auto space-y-4">
 
-        {messages.map((msg) => (
-          <MessageBubble
-            key={msg.id}
-            direction={msg.direction}
-            message={msg.messageText}
-            createdAt={msg.createdAt}
-            status={msg.status}
-          />
-        ))}
+{messages.map((msg) => (
+  <MessageBubble
+    key={msg.id}
+
+    direction={msg.direction}
+
+    messageText={msg.messageText}
+
+    messageType={msg.messageType}
+
+    mediaType={msg.mediaType}
+
+    metaMediaId={msg.metaMediaId}
+
+    fileName={msg.fileName}
+
+    mimeType={msg.mimeType}
+
+    status={msg.status}
+
+    createdAt={msg.createdAt}
+  />
+))}
 
         <div ref={bottomRef} />
 
