@@ -108,10 +108,11 @@ export default function MessageBubble({
     </div>
 
   </button>
+
 ) : (
-  <p className="whitespace-pre-wrap break-words">
-    {messageText}
-  </p>
+<p className="whitespace-pre-wrap break-words">
+  {linkify(messageText ?? '')}
+</p>
 )}
 
 <div className="mt-2 flex items-center justify-end gap-2 text-xs text-gray-500">
