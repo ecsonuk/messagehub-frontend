@@ -30,6 +30,8 @@ const chatScrollRef = useRef<HTMLDivElement>(null);
 const bottomRef = useRef<HTMLDivElement>(null);
 
 const autoScrollRef = useRef(true);
+const selectedConversationTimestampRef =
+  useRef<string | null>(null);
 
 
 useEffect(() => {
@@ -111,18 +113,34 @@ notificationSound.current?.play().catch(() => {});
 
 if (selectedCustomer) {
 
-  await loadConversation(
-    selectedCustomer,
-    selectedCustomerName,
+  const selectedItem = data.find(
+    (item: Conversation) =>
+      item.whatsappNumber === selectedCustomer,
   );
 
-  requestAnimationFrame(() => {
-    if (autoScrollRef.current) {
-      bottomRef.current?.scrollIntoView({
-        behavior: 'smooth',
-      });
-    }
-  });
+  if (
+    selectedItem &&
+    selectedConversationTimestampRef.current !==
+      selectedItem.lastInboundAt
+  ) {
+
+    selectedConversationTimestampRef.current =
+      selectedItem.lastInboundAt;
+
+    await loadConversation(
+      selectedCustomer,
+      selectedCustomerName,
+    );
+
+    requestAnimationFrame(() => {
+      if (autoScrollRef.current) {
+        bottomRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+    });
+
+  }
 
 }
 
