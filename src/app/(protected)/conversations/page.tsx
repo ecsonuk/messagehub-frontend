@@ -109,23 +109,24 @@ notificationSound.current?.play().catch(() => {});
   return data;
 });
 
-    if (selectedCustomer) {
+if (selectedCustomer) {
 
-await loadConversation(
-  selectedCustomer,
-  selectedCustomerName,
-);
+  await loadConversation(
+    selectedCustomer,
+    selectedCustomerName,
+  );
 
-requestAnimationFrame(() => {
-  if (autoScrollRef.current) {
-    bottomRef.current?.scrollIntoView({
-      behavior: 'smooth',
-    });
-  }
-});
-
+  requestAnimationFrame(() => {
+    if (autoScrollRef.current) {
+      bottomRef.current?.scrollIntoView({
+        behavior: 'smooth',
+      });
     }
-  }, 5000);
+  });
+
+}
+
+  }, 60000);
 
   return () => clearInterval(interval);
 }, [selectedCustomer, selectedCustomerName]);
