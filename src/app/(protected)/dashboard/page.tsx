@@ -2,6 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from 'recharts';
+
 import { getDashboard } from '@/services/dashboard.service';
 
 interface DashboardData {
@@ -9,16 +20,53 @@ interface DashboardData {
   completedCampaigns: number;
   templates: number;
   messages: number;
+
   recentCampaigns: {
     id: string;
     name: string;
     status: string;
   }[];
+
   recentActivity: {
     id: string;
     action: string;
     createdAt: string;
   }[];
+
+  mtTrend: {
+    date: string;
+    messages: number;
+  }[];
+
+  moTrend: {
+    date: string;
+    messages: number;
+  }[];
+
+messageLifecycle: {
+  date: string;
+  sent: number;
+  delivered: number;
+  read: number;
+  replied: number;
+}[];
+
+failureSummary: {
+  reason: string;
+  count: number;
+}[];
+
+campaignSummary: {
+  sent: number;
+  delivered: number;
+  read: number;
+  replied: number;
+
+  deliveryRate: number;
+  readRate: number;
+  replyRate: number;
+};
+
 }
 
 export default function DashboardPage() {
@@ -46,111 +94,294 @@ export default function DashboardPage() {
     return <div>Failed to load dashboard.</div>;
   }
 
+const trafficTrend = data.mtTrend.map((mt) => {
+  const mo = data.moTrend.find((m) => m.date === mt.date);
+
+  return {
+    date: mt.date,
+    outbound: mt.messages,
+    inbound: mo?.messages ?? 0,
+  };
+});
+
   return (
     <div>
 
-      <h1 className="text-3xl font-bold text-slate-800">
-        Dashboard
-      </h1>
+	<div className="mt-0">
 
-      <p className="mt-2 text-slate-500">
-        Welcome to Luxury Ride WhatsApp Campaign Platform.
-      </p>
+          <div className="rounded-xl bg-white p-2 shadow">
 
-      <div className="mt-8 grid grid-cols-4 gap-6">
+            <h2 className="mb-6 text-xl font-semibold">
+              Message Traffic Trend (Last 30 Days)
+            </h2>
 
-        <div className="rounded-xl bg-white p-6 shadow">
-          <h3 className="text-slate-500">
-            Running Campaigns
-          </h3>
+            <div className="h-56">
 
-          <p className="mt-4 text-4xl font-bold">
-            {data.runningCampaigns}
-          </p>
-        </div>
+              <ResponsiveContainer width="100%" height="100%">
 
-        <div className="rounded-xl bg-white p-6 shadow">
-          <h3 className="text-slate-500">
-            Completed Campaigns
-          </h3>
+                <LineChart data={trafficTrend}>
 
-          <p className="mt-4 text-4xl font-bold">
-            {data.completedCampaigns}
-          </p>
-        </div>
+                  <CartesianGrid strokeDasharray="3 3" />
 
-        <div className="rounded-xl bg-white p-6 shadow">
-          <h3 className="text-slate-500">
-            Templates
-          </h3>
+                  <XAxis
+                    dataKey="date"
+                    type="category"
+                    interval={0}
+                  />
 
-          <p className="mt-4 text-4xl font-bold">
-            {data.templates}
-          </p>
-        </div>
+                  <YAxis
+                    allowDecimals={false}
+                    domain={[0, 'dataMax + 10']}
+                  />
 
-        <div className="rounded-xl bg-white p-6 shadow">
-          <h3 className="text-slate-500">
-            Messages
-          </h3>
+                  <Legend />
 
-          <p className="mt-4 text-4xl font-bold">
-            {data.messages}
-          </p>
-        </div>
+                  <Tooltip />
 
-      </div>
+                  <Line
+                    type="monotone"
+                    dataKey="outbound"
+                    name="Outbound"
+                    stroke="#2563eb"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                    activeDot={{ r: 6 }}
+                    animationDuration={800}
+                  />
 
-      <div className="mt-10 grid grid-cols-2 gap-6">
+                  <Line
+                    type="monotone"
+                    dataKey="inbound"
+                    name="Inbound"
+                    stroke="#16a34a"
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                    activeDot={{ r: 6 }}
+                    animationDuration={800}
+                  />
 
-        <div className="rounded-xl bg-white p-6 shadow">
+                </LineChart>
 
-          <h2 className="mb-4 text-xl font-semibold">
-            Recent Campaigns
-          </h2>
+              </ResponsiveContainer>
 
-          <ul className="space-y-3">
+            </div>
 
-            {data.recentCampaigns.map((campaign) => (
-              <li
-                key={campaign.id}
-                className="flex justify-between border-b pb-2"
-              >
-                <span>{campaign.name}</span>
-                <span>{campaign.status}</span>
-              </li>
-            ))}
-
-          </ul>
+          </div>
 
         </div>
 
-        <div className="rounded-xl bg-white p-6 shadow">
+<div className="mt-1">
 
-          <h2 className="mb-4 text-xl font-semibold">
-            Recent Activity
-          </h2>
+  <div className="rounded-xl bg-white p-2 shadow">
 
-          <ul className="space-y-3">
+    <h2 className="mb-6 text-xl font-semibold">
+      Message Lifecycle (Last 30 Days)
+    </h2>
 
-            {data.recentActivity.map((activity) => (
-              <li
-                key={activity.id}
-                className="border-b pb-2"
-              >
-                <div>{activity.action}</div>
+    <div className="h-56">
 
-                <div className="text-sm text-gray-500">
-                  {new Date(activity.createdAt).toLocaleString()}
-                </div>
-              </li>
-            ))}
+      <ResponsiveContainer width="100%" height="100%">
 
-          </ul>
+        <LineChart data={data.messageLifecycle}>
 
-        </div>
+          <CartesianGrid strokeDasharray="3 3" />
 
-      </div>
+          <XAxis
+            dataKey="date"
+            type="category"
+            interval={0}
+          />
+
+          <YAxis
+            allowDecimals={false}
+            domain={[0, 'dataMax + 10']}
+          />
+
+          <Tooltip />
+
+          <Legend />
+
+          <Line
+            type="monotone"
+            dataKey="sent"
+            name="Sent"
+            stroke="#2563eb"
+            strokeWidth={3}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
+          />
+
+          <Line
+            type="monotone"
+            dataKey="delivered"
+            name="Delivered"
+            stroke="#9333ea"
+            strokeWidth={3}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
+          />
+
+          <Line
+            type="monotone"
+            dataKey="read"
+            name="Read"
+            stroke="#16a34a"
+            strokeWidth={3}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
+          />
+
+          <Line
+            type="monotone"
+            dataKey="replied"
+            name="Replies"
+            stroke="#ea580c"
+            strokeWidth={3}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
+          />
+
+        </LineChart>
+
+      </ResponsiveContainer>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div className="mt-1 grid grid-cols-2 gap-6">
+
+  <div className="rounded-xl bg-white p-2 shadow">
+
+<div className="mb-0.1 flex items-center justify-between">
+
+  <h2 className="text-xl font-semibold">
+    Failed Message Summary
+  </h2>
+
+  <span className="rounded-full bg-red-100 px-4 py-2 text-sm font-semibold text-red-700">
+    Last 30 Days • Total Failed: {data.totalFailedMessages}
+  </span>
+
+</div>
+
+    <table className="w-full">
+
+      <thead>
+
+        <tr className="border-b">
+
+          <th className="py-1 text-left">
+            Failure Reason
+          </th>
+
+          <th className="py-1 text-right">
+            Count
+          </th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        {data.failureSummary.map((item) => (
+
+          <tr
+            key={item.reason}
+            className="border-b last:border-0"
+          >
+
+            <td className="py-3">
+              {item.reason}
+            </td>
+
+<td className="py-3 text-right">
+  <span className="inline-flex min-w-[52px] justify-center rounded-full bg-red-100 px-4 py-1.5 text-sm font-bold text-red-700">
+    {item.count}
+  </span>
+</td>
+
+          </tr>
+
+        ))}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+<div className="rounded-xl bg-white p-6 shadow">
+
+  <h2 className="mb-6 text-xl font-semibold">
+    Message Performance
+  </h2>
+
+  <div className="space-y-5">
+
+    <div className="flex justify-between">
+      <span>Sent</span>
+      <span className="font-bold">
+        {data.campaignSummary.sent}
+      </span>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Delivered</span>
+
+<div className="flex items-center gap-2">
+
+  <span className="text-xl font-bold text-green-600">
+    {data.campaignSummary.delivered}
+  </span>
+
+  <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+    {data.campaignSummary.deliveryRate}%
+  </span>
+
+</div>
+    </div>
+
+    <div className="flex justify-between">
+      <span>Read</span>
+<div className="flex items-center gap-2">
+
+  <span className="text-xl font-bold text-blue-600">
+    {data.campaignSummary.read}
+  </span>
+
+  <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
+    {data.campaignSummary.readRate}%
+  </span>
+
+</div>
+
+    </div>
+
+    <div className="flex justify-between">
+      <span>Replies</span>
+
+<div className="flex items-center gap-2">
+
+  <span className="text-xl font-bold text-purple-600">
+    {data.campaignSummary.replied}
+  </span>
+
+  <span className="rounded-full bg-purple-100 px-2 py-1 text-xs font-semibold text-purple-700">
+    {data.campaignSummary.replyRate}%
+  </span>
+
+</div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
 
     </div>
   );
