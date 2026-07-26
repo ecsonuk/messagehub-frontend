@@ -56,6 +56,8 @@ failureSummary: {
   count: number;
 }[];
 
+totalFailedMessages: number;
+
 campaignSummary: {
   sent: number;
   delivered: number;
