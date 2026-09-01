@@ -184,7 +184,7 @@ if (selectedCustomer) {
       }
     });
 
-} finally {
+    } finally {
       setLoadingConversation(false);
 }
 
