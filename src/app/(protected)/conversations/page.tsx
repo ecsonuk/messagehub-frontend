@@ -128,18 +128,24 @@ if (selectedCustomer) {
     selectedConversationTimestampRef.current =
       selectedItem.lastInboundAt;
 
-    await loadConversation(
-      selectedCustomer,
-      selectedCustomerName,
-    );
+const token = localStorage.getItem('access_token');
 
-    requestAnimationFrame(() => {
-      if (autoScrollRef.current) {
-        bottomRef.current?.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }
-    });
+const conversationResponse = await fetch(
+  `${process.env.NEXT_PUBLIC_API_URL}/conversations/${selectedCustomer}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  },
+);
+
+const conversationData = await conversationResponse.json();
+
+setSelectedConversation(conversationData);
+
+if (autoScrollRef.current) {
+  bottomRef.current?.scrollIntoView();
+}
 
   }
 
@@ -155,7 +161,9 @@ if (selectedCustomer) {
     // Immediately update UI
     setSelectedCustomer(number);
     setSelectedCustomerName(customerName);
-    setLoadingConversation(true);
+if (selectedCustomer !== number) {
+  setLoadingConversation(true);
+}
     setUnread((u) => ({
       ...u,
       [number]: false,
@@ -175,12 +183,14 @@ if (selectedCustomer) {
     const data = await response.json();
 
     setSelectedConversation(data);
-    setLoadingConversation(false);
+if (selectedCustomer !== number) {
+  setLoadingConversation(false);
+}
     requestAnimationFrame(() => {
       if (autoScrollRef.current) {
-        bottomRef.current?.scrollIntoView({
-          behavior: 'smooth',
-        });
+bottomRef.current?.scrollIntoView({
+  behavior: 'auto',
+});
       }
     });
 
