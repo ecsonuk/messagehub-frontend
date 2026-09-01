@@ -184,10 +184,7 @@ if (selectedCustomer) {
       }
     });
 
-} finally {
-      setLoadingConversation(false);
 }
-
 async function sendMessage() {
   if (!selectedCustomer || !message.trim()) {
     return;
