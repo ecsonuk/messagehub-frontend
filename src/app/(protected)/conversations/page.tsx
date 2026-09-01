@@ -149,38 +149,41 @@ if (selectedCustomer) {
   return () => clearInterval(interval);
 }, [selectedCustomer, selectedCustomerName]);
 
-async function loadConversation(number: string, customerName: string,) {
-  const token = localStorage.getItem('access_token');
+  async function loadConversation(number: string, customerName: string,) {
 
-  const response = await fetch(
-	`${process.env.NEXT_PUBLIC_API_URL}/conversations/${number}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    // Immediately update UI
+    setSelectedCustomer(number);
+    setSelectedCustomerName(customerName);
+
+    setUnread((u) => ({
+      ...u,
+      [number]: false,
+    }));
+
+    const token = localStorage.getItem('access_token');
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/${number}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    },
-  );
+    );
 
-  const data = await response.json();
+    const data = await response.json();
 
-  setSelectedCustomer(number);
-  setSelectedCustomerName(customerName);
-  setSelectedConversation(data);
+    setSelectedConversation(data);
 
-requestAnimationFrame(() => {
-  if (autoScrollRef.current) {
-    bottomRef.current?.scrollIntoView({
-      behavior: 'smooth',
+    requestAnimationFrame(() => {
+      if (autoScrollRef.current) {
+        bottomRef.current?.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
     });
+
   }
-});
-
-	setUnread((u) => ({
-	  ...u,
-	  [number]: false,
-	}));
-
-}
 
 async function sendMessage() {
   if (!selectedCustomer || !message.trim()) {
