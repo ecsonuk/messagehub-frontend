@@ -144,7 +144,7 @@ if (selectedCustomer) {
 
 }
 
-  }, 60000);
+  }, 10000);
 
   return () => clearInterval(interval);
 }, [selectedCustomer, selectedCustomerName]);
